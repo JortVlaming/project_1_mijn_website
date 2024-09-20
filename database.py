@@ -41,7 +41,10 @@ class UserManager:
         self.db = db
         pass
 
-class user:
-    def __init__(self, id:int, username: str, password: str):
+class User:
+    def __init__(self, id:int, username: str, naam: str, opleiding: str, aboutme: str):
         self.id = id
         self.username = username
+        self.naam = naam
+        self.opleiding = opleiding
+        self.aboutme = aboutme

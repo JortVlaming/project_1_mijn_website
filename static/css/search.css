@@ -1,0 +1,43 @@
+#content {
+    margin-top: 2.5%;
+    color: white;
+    text-align: center;
+}
+
+#results {
+    margin-top: 2.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.result {
+    margin-bottom: 2.5%;
+    color: black;
+    background-color: white;
+    border-radius: 15px;
+    text-align: left;
+    padding: 1%;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    transition: ease-in 0.2s;
+}
+
+.result:hover {
+    background-color: #dfdfdf;
+    transform: translate(0, -5px);
+}
+
+.naam {
+    font-size: 1.5em;
+}
+
+.opleiding {
+    font-size: 1em;
+    color: #575757;
+}
+
+a {
+    text-decoration: none;
+}
