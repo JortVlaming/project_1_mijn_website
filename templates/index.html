@@ -6,6 +6,7 @@
 
 {% block header %}
 	<link rel="stylesheet" href="{{ url_for('static', filename="css/index.css") }}">
+    <script src="{{ url_for('static', filename="scripts/components.js") }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -13,10 +14,7 @@
     <p>Het blog waar Talland studenten kunnen vertellen hoe hun opleiding gaat en wat ze vinden van de school</p>
     <div class="search-seperator"></div>
     <h2>Zoek voor een student</h2>
-    <form action="search" id="search">
-        <input type="text" placeholder="Student naam" id="query" name="query">
-        <button type="submit">Search</button>
-    </form>
+    <custom-search-bar></custom-search-bar>
     <div class="search-seperator"></div>
     <div class="recents">
     <h2>Recente posts</h2>

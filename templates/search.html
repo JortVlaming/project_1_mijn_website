@@ -6,11 +6,13 @@
 
 {% block header %}
 	<link rel="stylesheet" href="{{ url_for('static', filename="css/search.css") }}">
+    <script src="{{ url_for('static', filename="scripts/components.js") }}"></script>
 {% endblock %}
 
 {% block content %}
 	<h1>Zoek resultaten voor: {{ query }}</h1>
     <p>{{ results|length }} resultaten</p>
+    <custom-search-bar style="margin-left: 1.5%;"></custom-search-bar>
     <div id="results">
     {% for result in results %}
         <a href="/user?username='{{ result.username }}'">

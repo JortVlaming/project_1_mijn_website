@@ -18,6 +18,13 @@ def search():
     # TODO search
     return render_template("search.html", db=db, results=[User(0, "test", "Jort Vlaming", "Software Developer", "Korte test about me"), User(0, "test", "Jort Vlaming", "Software Developer", "Korte test about me")], query=request.args.get("query"))
 
+@app.route('/user')
+def user():
+    # todo display proper user information
+    if (request.args.get("username") is None):
+        return redirect(url_for("home"))
+    return render_template("user.html", db=db, user=User(0, "test", "Jort Vlaming", "Software Developer", "Korte test about me"))
+
 @app.route('/set_token')
 def set_token():
     session["token"] = db.generate_token("test", "test")
