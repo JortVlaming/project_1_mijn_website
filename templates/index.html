@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'layout.html' %}
 
-</body>
-</html>
+{% block title %}
+	Talland Blog
+{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" href="{{ url_for('static', filename="css/index.css") }}">
+{% endblock %}
+
+{% block content %}
+    <h1 id="title">Talland Blog</h1>
+    <p>Het blog waar Talland studenten kunnen vertellen hoe hun opleiding gaat en wat ze vinden van de school</p>
+    <div class="search-seperator"></div>
+    <h2>Zoek voor een student</h2>
+    <form action="search" id="search">
+        <input type="text">
+        <button type="submit">Search</button>
+    </form>
+    <div class="search-seperator"></div>
+    <div class="recents">
+    <h2>Recente posts</h2>
+    {% if (recents|length == 0) %}
+        <p>Geen recente posts</p>
+    {% else %}
+        <!-- TODO add recents !-->
+    {% endif %}
+    </div>
+{% endblock %}
