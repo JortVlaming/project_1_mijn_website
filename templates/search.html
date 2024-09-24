@@ -15,7 +15,7 @@
     <custom-search-bar style="margin-left: 1.5%;"></custom-search-bar>
     <div id="results">
     {% for result in results %}
-        <a href="/user?username='{{ result.username }}'">
+        <a href="/user/{{ result.username }}">
     	    <div class="result">
                 <h1 class="naam">{{ result.naam }}</h1>
                 <h2 class="opleiding">{{ result.opleiding }}</h2>

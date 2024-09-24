@@ -1,0 +1,47 @@
+body {
+    color: white;
+}
+
+.user-info {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.handle {
+    color: #5c5c5c;
+}
+
+.opleiding {
+    color: #686868;
+}
+
+.aboutme {
+    margin-top: 2.5%;
+    font-size: 1.5em;
+}
+
+.user_content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.post {
+    background-color: white;
+    border-radius: 15px;
+    text-align: left;
+    padding: 2%;
+    color: black;
+    margin-top: 1%;
+}
+
+.posted_time {
+    color: gray;
+    font-size: 0.8em;
+    margin-bottom: 1px;
+    align-self: flex-end;
+    float: right;
+}

@@ -1,4 +1,6 @@
 import base64, time
+from datetime import datetime
+
 
 # dummy class until i get around to implementing mysql
 
@@ -48,3 +50,11 @@ class User:
         self.naam = naam
         self.opleiding = opleiding
         self.aboutme = aboutme
+
+class Post:
+    def __init__(self, poster: str, post_id:int, content: str, posted: datetime=datetime.now(), deleted: bool=False):
+        self.poster = poster
+        self.post_id = post_id
+        self.content = content
+        self.posted = posted
+        self.deleted = deleted

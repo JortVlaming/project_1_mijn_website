@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+	Login Or Signup
+{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" href="{{ url_for("static", filename="css/login.css") }}">
+{% endblock %}
+
+{% block content %}
+    <div class="left">
+        <h1>Login</h1>
+        <form action="auth/callback/login" id="loginForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+        </form>
+        <button id="LoginButton">Login</button>
+    </div>
+    <div class="seperator"></div>
+    <div class="right">
+        <h1>Signup</h1>
+        <form action="auth/callback/signup" id="loginForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password">
+        </form>
+        <button id="LoginButton">Signup</button>
+    </div>
+    <script src="{{ url_for("static", filename="scripts/login.js") }}"></script>
+{% endblock %}
