@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}
+    	
+    {% endblock %}</title>
+{% block header %}
+	
+{% endblock %}
+<link rel="stylesheet" href="{{ url_for("static", filename="css/layout.css") }}">
+</head>
+<body>
+    <div id="nav">
+        <div class="left">
+            <a href="/"><h1 id="logo">Talland Blog</h1></a>
+        </div>
+
+        <div class="right">
+            {% if (session.get("token") != None and db.verify_token(session.get("token"))) %}
+                {{ session.get("token") }}
+                <form action="reset_token">
+                    <button type="submit">Logout</button>
+                </form>
+            {% else %}
+                <a href="login" id="navLoginButton"><button type="submit">Login</button></a>
+            {% endif %}
+        </div>
+    </div>
+    <div id="content">
+{% block content %}
+	
+{% endblock %}
+    </div>
+</body>
+</html>

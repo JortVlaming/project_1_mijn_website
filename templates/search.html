@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+	Resultaten voor {{ query }}
+{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" href="{{ url_for('static', filename="css/search.css") }}">
+    <script src="{{ url_for('static', filename="scripts/components.js") }}"></script>
+{% endblock %}
+
+{% block content %}
+	<h1>Zoek resultaten voor: {{ query }}</h1>
+    <p>{{ results|length }} resultaten</p>
+    <custom-search-bar style="margin-left: 1.5%;"></custom-search-bar>
+    <div id="results">
+    {% for result in results %}
+        <a href="/user/{{ result.username }}">
+    	    <div class="result">
+                <h1 class="naam">{{ result.naam }}</h1>
+                <h2 class="opleiding">{{ result.opleiding }}</h2>
+                <p class="aboutme">{{ result.aboutme }}</p>
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+
+{% endblock %}
