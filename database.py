@@ -80,7 +80,17 @@ class TokenManager:
 
         token = now_b64 + b"." + id_b64 + b"." + username_b64 + b"." + password_b64
 
-        return token.decode("ascii")
+        token = token.decode("ascii")
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("INSERT INTO tokens (token) VALUES (%s)", (token,))
+
+        cursor.close()
+        conn.close()
+
+        return token
 
     def verify_token(self, token: str|None) -> bool:
         if token is None:
@@ -97,7 +107,20 @@ class TokenManager:
         un = base64.b64decode(un_b64.encode("ascii")).decode("ascii")
         pwd = base64.b64decode(pwd_b64.encode("ascii")).decode("ascii")
 
-        # TODO: verify token integrity
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM tokens WHERE token = %s", (token,))
+
+        result = cursor.fetchone()
+
+        if (result is None):
+            return False
+
+        print(result)
+
+        cursor.close()
+        conn.close()
 
         return True
 
