@@ -17,7 +17,7 @@
         </div>
 
         <div class="right">
-            {% if (session.get("token") != None and db.verify_token(session.get("token") or None)) %}
+            {% if (session.get("token") != None and db.verify_token(session.get("token") or session.get("token") == None)) %}
                 {{ session.get("token") }}
                 <form action="reset_token">
                     <button type="submit">Logout</button>
