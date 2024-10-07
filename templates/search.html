@@ -14,15 +14,19 @@
     <p>{{ results|length }} resultaten</p>
     <custom-search-bar style="margin-left: 1.5%;"></custom-search-bar>
     <div id="results">
-    {% for result in results %}
-        <a href="/user/{{ result.username }}">
-    	    <div class="result">
-                <h1 class="naam">{{ result.naam }}</h1>
-                <h2 class="opleiding">{{ result.opleiding }}</h2>
-                <p class="aboutme">{{ result.aboutme }}</p>
-            </div>
-        </a>
-    {% endfor %}
+    {% if results|length == 0 %}
+        No Results for query
+    {% else %}
+        {% for result in results %}
+            <a href="/user/{{ result.username }}">
+        	    <div class="result">
+                    <h1 class="naam">{{ result.naam }}</h1>
+                    <h2 class="opleiding">{{ result.opleiding }}</h2>
+                    <p class="aboutme">{{ result.aboutme }}</p>
+                </div>
+            </a>
+        {% endfor %}
+    {% endif %}
     </div>
 
 {% endblock %}

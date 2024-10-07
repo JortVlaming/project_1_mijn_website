@@ -1,7 +1,7 @@
 from datetime import datetime
-from xmlrpc.client import DateTime
 
-from flask import Flask, render_template, session, redirect, url_for, request
+from flask import Flask, render_template, request
+
 from database import Database, User, Post
 
 app = Flask(__name__)
@@ -12,17 +12,19 @@ db = Database()
 
 @app.route('/')
 def home():
-    return render_template("index.html", db=db, recents=[])
+    return render_template("index.html", recents=[])
 
 @app.route('/search')
 def search():
     # TODO search
-    return render_template("search.html", db=db, results=[User(0, "test", "Jort Vlaming", "Software Developer", "Korte test about me"), User(0, "test", "Jort Vlaming", "Software Developer", "Korte test about me")], query=request.args.get("query"))
+    return render_template("search.html", results=db.userManager.search_for_users(request.args.get("query")), query=request.args.get("query"))
 
 @app.route('/user/<string:name>')
 def user(name:str):
+    if not db.userManager.user_exists(name):
+        return 404
     # todo display proper user information
-    return render_template("user.html", db=db, user=User(0, "test", "Jort Vlaming", "Software Developer", "Korte test about me"), posts=[Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now())])
+    return render_template("user.html", user=db.userManager.get_user(name), posts=[Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now())])
 
 @app.route('/login')
 def login():

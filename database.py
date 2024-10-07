@@ -32,8 +32,11 @@ class Database:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS tokens (
                 generated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                expires_at DATETIME DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY),
-                token TEXT UNIQUE NOT NULL
+                expires_at DATETIME DEFAULT (CURRENT_TIMESTAMP + INTERVAL 30 DAY),
+                token TEXT UNIQUE NOT NULL,
+                user_id BIGINT,
+                password_hash TEXT,
+                CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
         """)
 
@@ -48,6 +51,64 @@ class UserManager:
     def __init__(self, db:Database):
         self.db = db
         pass
+
+    def add_user(self, username, displayname, password_hash, opleiding, aboutme):
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("INSERT INTO users(username, displayname, password_hash, opleiding, aboutme) VALUES (%s, %s, %s, %s, %s)", (username, displayname, password_hash, opleiding, aboutme,))
+
+        result = cursor.fetchall()
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        print(result)
+
+        if result is None:
+            return False
+        elif len(result) == 0:
+            return False
+
+        return True
+
+    def user_exists(self, *args):
+        if len(args) == 0:
+            return False
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        if isinstance(args[0], int):
+            cursor.execute("SELECT * FROM users WHERE id = %s", (args[0],))
+        elif isinstance(args[0], str):
+            cursor.execute("SELECT * FROM users WHERE username = %s", (args[0],))
+        else:
+            return False
+
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if result is None:
+            return False
+
+        return True
+
+    def search_for_users(self, query):
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM users WHERE username LIKE %s", ("%{}%".format(query),))
+
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return result
 
 class User:
     def __init__(self, id:int, username: str, naam: str, opleiding: str, aboutme: str):
@@ -85,8 +146,9 @@ class TokenManager:
         conn = self.db.get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("INSERT INTO tokens (token) VALUES (%s)", (token,))
+        cursor.execute("INSERT INTO tokens (token, user_id, password_hash) VALUES (%s, %s, %s)", (token, id, password,))
 
+        conn.commit()
         cursor.close()
         conn.close()
 
@@ -95,8 +157,58 @@ class TokenManager:
     def verify_token(self, token: str|None) -> bool:
         if token is None:
             return False
-        split = token.split(".")
 
+        gen, UID, un, pwd = self.__extract_user_info_from_token(token)
+
+        if not self.db.userManager.user_exists(un) and not self.db.userManager.user_exists(UID):
+            return False
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        print(token, UID, pwd)
+
+        cursor.execute("SELECT * FROM tokens WHERE token = %s and user_id = %s and password_hash = %s", (token, UID, pwd,))
+
+        result = cursor.fetchone()
+
+        if result is None:
+            return False
+
+        cursor.close()
+        conn.close()
+
+        return True
+
+    def token_to_user(self, token:str) -> User|None:
+        if self.verify_token(token) is False:
+            return None
+
+        gen, UID, un, pwd = self.__extract_user_info_from_token(token)
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM users WHERE id = %s", (UID,))
+
+        result = cursor.fetchone()
+
+        if result is None:
+            return None
+
+        if len(result) == 0:
+            return None
+
+        cursor.close()
+        conn.close()
+
+        return User(result[0], result[1], result[2], result[4], result[5])
+
+    def __extract_user_info_from_token(self, token:str) -> tuple|None:
+        if token is None:
+            return None
+
+        split = token.split(".")
         gen_b64 = split[0]
         id_b64 = split[1]
         un_b64 = split[2]
@@ -107,35 +219,6 @@ class TokenManager:
         un = base64.b64decode(un_b64.encode("ascii")).decode("ascii")
         pwd = base64.b64decode(pwd_b64.encode("ascii")).decode("ascii")
 
-        conn = self.db.get_db_connection()
-        cursor = conn.cursor()
+        return (gen, id, un, pwd)
 
-        cursor.execute("SELECT * FROM tokens WHERE token = %s", (token,))
-
-        result = cursor.fetchone()
-
-        if (result is None):
-            return False
-
-        print(result)
-
-        cursor.close()
-        conn.close()
-
-        return True
-
-    def token_to_user(self, token:str) -> User|None:
-        if self.verify_token(token) is False:
-            return None
-        if token is None:
-            return None
-
-        split = token.split(".")
-        gen_b64 = split[0]
-        un_b64 = split[1]
-        pwd = split[2]
-
-        gen = base64.b64decode(gen_b64.encode("ascii")).decode("ascii")
-        un = base64.b64decode(un_b64.encode("ascii")).decode("ascii")
-        pwd = base64.b64decode(pwd.encode("ascii")).decode("ascii")
 
