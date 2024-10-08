@@ -3,6 +3,7 @@ from datetime import datetime
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from werkzeug.security import check_password_hash
 
 class Database:
     def __init__(self):
@@ -64,8 +65,6 @@ class UserManager:
         cursor.close()
         conn.close()
 
-        print(result)
-
         if result is None:
             return False
         elif len(result) == 0:
@@ -109,6 +108,41 @@ class UserManager:
         conn.close()
 
         return result
+
+    def verify_login(self, username: str, password: str):
+        if not self.user_exists(username):
+            return False
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT password_hash FROM users WHERE username = %s", (username,))
+
+        result = cursor.fetchone()[0]
+
+        cursor.close()
+        conn.close()
+
+        return check_password_hash(result, password)
+
+    def username_to_id(self, username:str) -> int|None:
+        if not self.user_exists(username):
+            return None
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
+
+        result = cursor.fetchone()
+
+        if result is None:
+            return None
+
+        if len(result) == 0:
+            return None
+
+        return result[0]
 
 class User:
     def __init__(self, id:int, username: str, naam: str, opleiding: str, aboutme: str):
@@ -165,8 +199,6 @@ class TokenManager:
 
         conn = self.db.get_db_connection()
         cursor = conn.cursor()
-
-        print(token, UID, pwd)
 
         cursor.execute("SELECT * FROM tokens WHERE token = %s and user_id = %s and password_hash = %s", (token, UID, pwd,))
 

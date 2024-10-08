@@ -11,7 +11,7 @@
 {% block content %}
     <div class="left">
         <h1>Login</h1>
-        <form action="auth/callback/login" id="loginForm">
+        <form action="auth/login" id="loginForm" name="loginForm">
             <label for="username">Username</label>
             <input type="text" id="username" name="username">
             <label for="password">Password</label>
@@ -22,7 +22,7 @@
     <div class="seperator"></div>
     <div class="right">
         <h1>Signup</h1>
-        <form action="auth/callback/signup" id="loginForm">
+        <form action="auth/callback/signup" id="loginForm" name="signupForm">
             <label for="username">Username</label>
             <input type="text" id="username" name="username">
             <label for="password">Password</label>

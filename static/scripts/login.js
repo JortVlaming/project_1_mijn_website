@@ -4,7 +4,7 @@ let signupButton = document.getElementById("SignupButton");
 document.getElementById("navLoginButton").hidden = true;
 
 loginButton.addEventListener("click", function() {
-    console.log("login");
+    document.getElementById("loginForm").submit();
 });
 
 signupButton.addEventListener("click", function() {
