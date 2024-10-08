@@ -5,10 +5,11 @@
     <title>{% block title %}
     	
     {% endblock %}</title>
-{% block header %}
-	
-{% endblock %}
-<link rel="stylesheet" href="{{ url_for("static", filename="css/layout.css") }}">
+    {% block header %}
+
+    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/layout.css") }}">
+    <script src="{{ url_for('static', filename="scripts/components.js") }}"></script>
 </head>
 <body>
     <div id="nav">
@@ -17,11 +18,18 @@
         </div>
 
         <div class="right">
-            {% if (session.get("token") != None and db.verify_token(session.get("token") or session.get("token") == None)) %}
-                {{ session.get("token") }}
-                <form action="reset_token">
-                    <button type="submit">Logout</button>
-                </form>
+            {% if (user != None) %}
+                <div class="user-menu">
+                <button aria-label="User menu">
+                    <a href="/user/me">
+                        <span>@{{ user.username }}</span>
+                    </a>
+                </button>
+                <div class="dropdown-content">
+                    <a href="/user/me">My Profile</a>
+                    <a href="/auth/logout"><span class="logout_text">Logout</span></a>
+                </div>
+                </div>
             {% else %}
                 <a href="login" id="navLoginButton"><button type="submit">Login</button></a>
             {% endif %}
