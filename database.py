@@ -144,11 +144,35 @@ class UserManager:
 
         return result[0]
 
+    def get_user_information(self, *args):
+        if len(args) == 0:
+            return False
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        if isinstance(args[0], int):
+            cursor.execute("SELECT id, username, displayname, opleiding, aboutme FROM users WHERE id = %s", (args[0],))
+        elif isinstance(args[0], str):
+            cursor.execute("SELECT id, username, displayname, opleiding, aboutme FROM users WHERE username = %s", (args[0],))
+        else:
+            return False
+
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if result is None:
+            return None
+
+        return User(result[0], result[1], result[2], result[3], result[4])
+
 class User:
-    def __init__(self, id:int, username: str, naam: str, opleiding: str, aboutme: str):
+    def __init__(self, id:int, username: str, displayName: str, opleiding: str, aboutme: str):
         self.id = id
         self.username = username
-        self.naam = naam
+        self.displayName = displayName
         self.opleiding = opleiding
         self.aboutme = aboutme
 
