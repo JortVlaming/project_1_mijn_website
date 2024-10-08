@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, abort
 
 from database import Database, User, Post
 
@@ -45,13 +45,13 @@ def login_callback():
     password = request.args.get("password")
 
     if not db.userManager.user_exists(username):
-        return 501
+        return abort(501)
 
     valid = db.userManager.verify_login(username, password)
 
     if not valid:
         # TODO redirect back to login with error
-        return 501
+        return abort(501)
 
     token = db.tokenManager.generate_token(db.userManager.username_to_id(username), username, password)
 
