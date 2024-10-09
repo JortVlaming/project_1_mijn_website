@@ -196,7 +196,7 @@ class UserManager:
         if userID is None:
             return None
 
-        cursor.execute("SELECT * FROM posts WHERE poster = %s", (userID,))
+        cursor.execute("SELECT * FROM posts WHERE poster = %s ORDER BY post_id DESC", (userID,))
 
         result = cursor.fetchall()
 

@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-    <div class="search-seperator"></div>
     <div class="user-info">
         <h4 class="handle">@{{ requested_user.username }}</h4>
 	    <h1 class="naam">{{ requested_user.naam }}</h1>
@@ -24,12 +23,17 @@
                 <p>Deze gebruiker heeft nog geen posts gemaakt</p>
             </div>
         {% else %}
-            {% for post in posts %}
-            	<div class="post">
-                    <p>{{ post[2] }}</p>
-                    <h4 class="posted_time">{{ post[3] }}</h4>
-                </div>
-            {% endfor %}
+            {% if requested_user.id == user.id %}
+                test
+            {% endif %}
+            <div class="post-container">
+                {% for post in posts %}
+                	<div class="post">
+                        <p>{{ post[2] }}</p>
+                        <h4 class="posted_time">{{ post[3] }}</h4>
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
 {% endblock %}

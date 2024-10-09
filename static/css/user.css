@@ -2,6 +2,10 @@ body {
     color: white;
 }
 
+#content {
+    margin-top: -5%;
+}
+
 .user-info {
     background-color: white;
     color: black;
@@ -22,20 +26,22 @@ body {
     font-size: 1.5em;
 }
 
-.user_content {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+#user_content {
+    height: 50%;
 }
 
 .post {
     background-color: white;
     border-radius: 15px;
     text-align: left;
-    padding: 2%;
+    height: 13%;
+    padding: 1% 1% 2%;
     color: black;
     margin-top: 1%;
+}
+
+.post-container {
+    padding-bottom: 10%;
 }
 
 .posted_time {
