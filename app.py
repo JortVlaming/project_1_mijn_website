@@ -39,6 +39,13 @@ def user(name:str):
     # todo display proper user information
     return render_template("user.html", requested_user=db.userManager.get_user_information(name), posts=[Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now())])
 
+@app.route("/user/me")
+def user_self():
+    if get_user_from_session() is None:
+        return abort(404)
+
+    return redirect(url_for("user", name=get_user_from_session().username))
+
 @app.route('/login')
 def login():
     return render_template("login.html", hide_login_button=True)
