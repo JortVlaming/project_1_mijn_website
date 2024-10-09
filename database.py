@@ -100,7 +100,7 @@ class UserManager:
         conn = self.db.get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM users WHERE username LIKE %s", ("%{}%".format(query),))
+        cursor.execute("SELECT id, username, displayname, opleiding, aboutme FROM users WHERE username LIKE %s", ("%{}%".format(query),))
 
         result = cursor.fetchall()
 
