@@ -11,10 +11,10 @@
 {% block content %}
     <div class="search-seperator"></div>
     <div class="user-info">
-	    <h1 class="naam">{{ user.naam }}</h1>
-        <h4 class="handle">@{{ user.username }}</h4>
-        <h2 class="opleiding">{{ user.opleiding }}</h2>
-        <p class="aboutme">{{ user.aboutme }}</p>
+        <h4 class="handle">@{{ requested_user.username }}</h4>
+	    <h1 class="naam">{{ requested_user.naam }}</h1>
+        <h2 class="opleiding">{{ requested_user.opleiding }}</h2>
+        <p class="aboutme">{{ requested_user.aboutme }}</p>
     </div>
     <div class="search-seperator"></div>
     <div id="user_content">
