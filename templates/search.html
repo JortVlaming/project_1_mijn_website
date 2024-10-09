@@ -6,7 +6,6 @@
 
 {% block header %}
 	<link rel="stylesheet" href="{{ url_for('static', filename="css/search.css") }}">
-    <script src="{{ url_for('static', filename="scripts/components.js") }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -18,11 +17,11 @@
         No Results for query
     {% else %}
         {% for result in results %}
-            <a href="/user/{{ result.username }}">
+            <a href="/user/{{ result[1] }}">
         	    <div class="result">
-                    <h1 class="naam">{{ result.naam }}</h1>
-                    <h2 class="opleiding">{{ result.opleiding }}</h2>
-                    <p class="aboutme">{{ result.aboutme }}</p>
+                    <h1 class="naam">{{ result[2] }} <span class="handle">@{{ result[1] }}</span></h1>
+                    <h2 class="opleiding">{{ result[3] }}</h2>
+                    <p class="aboutme">{{ result[4] }}</p>
                 </div>
             </a>
         {% endfor %}

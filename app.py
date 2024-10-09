@@ -26,7 +26,11 @@ def home():
 
 @app.route('/search')
 def search():
-    return render_template("search.html", results=db.userManager.search_for_users(request.args.get("query")), query=request.args.get("query"))
+    results = db.userManager.search_for_users(request.args.get("query"))
+
+    print(results)
+
+    return render_template("search.html", results=results, query=request.args.get("query"))
 
 @app.route('/user/<string:name>')
 def user(name:str):
