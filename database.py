@@ -41,6 +41,17 @@ class Database:
             )
         """)
 
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS posts (
+                poster BIGINT NOT NULL,
+                post_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                content TEXT NOT NULL,
+                posted DATETIME DEFAULT CURRENT_TIMESTAMP,
+                deleted BOOLEAN DEFAULT FALSE,
+                FOREIGN KEY (poster) REFERENCES users(id) ON DELETE CASCADE
+            )
+        """)
+
         self.userManager = UserManager(self)
         self.tokenManager = TokenManager(self)
         pass
@@ -168,6 +179,32 @@ class UserManager:
 
         return User(result[0], result[1], result[2], result[3], result[4])
 
+    def get_user_posts(self, *args):
+        if len(args) == 0:
+            return False
+
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        userID = None
+
+        if isinstance(args[0], int):
+            userID = args[0]
+        elif isinstance(args[0], str):
+            userID = self.username_to_id(args[0])
+
+        if userID is None:
+            return None
+
+        cursor.execute("SELECT * FROM posts WHERE poster = %s", (userID,))
+
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return result
+
 class User:
     def __init__(self, id:int, username: str, displayName: str, opleiding: str, aboutme: str):
         self.id = id
@@ -177,7 +214,7 @@ class User:
         self.aboutme = aboutme
 
 class Post:
-    def __init__(self, poster: str, post_id:int, content: str, posted: datetime=datetime.now(), deleted: bool=False):
+    def __init__(self, poster: int, post_id:int, content: str, posted: datetime=datetime.now(), deleted: bool=False):
         self.poster = poster
         self.post_id = post_id
         self.content = content

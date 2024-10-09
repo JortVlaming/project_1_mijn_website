@@ -26,8 +26,8 @@
         {% else %}
             {% for post in posts %}
             	<div class="post">
-                    <p>{{ post.content }}</p>
-                    <h4 class="posted_time">{{ post.posted }}</h4>
+                    <p>{{ post[2] }}</p>
+                    <h4 class="posted_time">{{ post[3] }}</h4>
                 </div>
             {% endfor %}
         {% endif %}

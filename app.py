@@ -37,7 +37,7 @@ def user(name:str):
     if not db.userManager.user_exists(name):
         return 404
     # todo display proper user information
-    return render_template("user.html", requested_user=db.userManager.get_user_information(name), posts=[Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now()),Post("test", 0, "insert lorem ipsum die ik niet kan auto generaten want dit is vscode niet", datetime.now())])
+    return render_template("user.html", requested_user=db.userManager.get_user_information(name), posts=db.userManager.get_user_posts(name))
 
 @app.route("/user/me")
 def user_self():
