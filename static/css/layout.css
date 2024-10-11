@@ -21,7 +21,7 @@ body {
 #nav {
     display: flex;
     background: #9393ff;
-    height: 10% !important;
+    min-height: 10%;
     width: 100vw !important;
     color: white;
     align-items: center;
