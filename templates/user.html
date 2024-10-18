@@ -11,21 +11,27 @@
 {% block content %}
     <div class="user-info">
         <h4 class="handle">@{{ requested_user.username }}</h4>
-	    <h1 class="naam">{{ requested_user.naam }}</h1>
+	    <h1 class="naam">{{ requested_user.displayName or requested_user.username }}</h1>
         <h2 class="opleiding">{{ requested_user.opleiding }}</h2>
         <p class="aboutme">{{ requested_user.aboutme }}</p>
     </div>
     <div class="search-seperator"></div>
     <div id="user_content">
         <h1>Posts</h1>
-        {% if posts|length == 0 %}
+        {% if requested_user.id == user.id %}
+            <div class="post" id="create_post">
+                <h2>Create Post</h2>
+                <form action="/api/post" class="create_post_form" method="post">
+                    <textarea name="content" id="post_content" cols="30" rows="5" placeholder="Post Content"></textarea>
+                </form>
+                <button id="create_post_button">Create Post</button>
+            </div>
+        {% endif %}
+        {% if posts|length == 0 and requested_user.id != user.id %}
             <div class="post">
                 <p>Deze gebruiker heeft nog geen posts gemaakt</p>
             </div>
         {% else %}
-            {% if requested_user.id == user.id %}
-                test
-            {% endif %}
             <div class="post-container">
                 {% for post in posts %}
                 	<div class="post">
