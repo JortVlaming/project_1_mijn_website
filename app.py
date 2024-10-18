@@ -1,8 +1,6 @@
-from datetime import datetime
-
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 
-from database import Database, User, Post
+from database import Database, User
 
 app = Flask(__name__)
 
@@ -36,7 +34,6 @@ def search():
 def user(name:str):
     if not db.userManager.user_exists(name):
         return 404
-    # todo display proper user information
     return render_template("user.html", requested_user=db.userManager.get_user_information(name), posts=db.userManager.get_user_posts(name))
 
 @app.route("/user/me")
@@ -74,6 +71,18 @@ def login_callback():
 def logout_callback():
     session.pop("token", None)
     return redirect(url_for("home"))
+
+@app.route('/api/create_post', methods=["POST"])
+def create_post():
+    if get_user_from_session() is None:
+        return abort(401)
+
+    if request.form.get("content") == "":
+        return redirect(url_for("user_self"))
+
+    db.userManager.create_post(get_user_from_session(), request.form.get("content"))
+
+    return redirect(url_for("user_self"))
 
 @app.context_processor
 def inject_template_scope():

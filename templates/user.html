@@ -21,10 +21,10 @@
         {% if requested_user.id == user.id %}
             <div class="post" id="create_post">
                 <h2>Create Post</h2>
-                <form action="/api/post" class="create_post_form" method="post">
+                <form action="/api/create_post" class="create_post_form" id="create_post_form" method="post">
                     <textarea name="content" id="post_content" cols="30" rows="5" placeholder="Post Content"></textarea>
+                    <button id="create_post_button">Create Post</button>
                 </form>
-                <button id="create_post_button">Create Post</button>
             </div>
         {% endif %}
         {% if posts|length == 0 and requested_user.id != user.id %}
@@ -42,4 +42,5 @@
             </div>
         {% endif %}
     </div>
+    <script src="{{ url_for('static', filename="scripts/user.js") }}"></script>
 {% endblock %}

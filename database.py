@@ -205,6 +205,18 @@ class UserManager:
 
         return result
 
+    def create_post(self, user, content:str):
+        if user is None:
+            return
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("INSERT INTO posts(content, poster) VALUES (%s, %s)", (content, user.id,))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
 class User:
     def __init__(self, id:int, username: str, displayName: str, opleiding: str, aboutme: str):
         self.id = id
