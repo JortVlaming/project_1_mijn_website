@@ -1,3 +1,6 @@
+import datetime
+import math
+
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 
 from database import Database, User
@@ -88,10 +91,31 @@ def create_post():
 def inject_template_scope():
     injections = dict()
 
-    injections.update(user=get_user_from_session())
+    injections.update(user=get_user_from_session(), pdate=prettydate)
 
     return injections
 
+def prettydate(d):
+    diff = datetime.datetime.now() - d
+    s = diff.seconds
+    if diff.days > 7:
+        return d.strftime('%d %b %y')
+    elif diff.days == 1:
+        return '1 day ago'
+    elif diff.days > 1:
+        return '{} days ago'.format(int(diff.days))
+    elif s <= 1:
+        return 'just now'
+    elif s < 60:
+        return '{} seconds ago'.format(int(s))
+    elif s < 120:
+        return '1 minute ago'
+    elif s < 3600:
+        return '{} minutes ago'.format(int(s/60))
+    elif s < 7200:
+        return '1 hour ago'
+    else:
+        return '{} hours ago'.format(int(s/3600))
 
 if __name__ == '__main__':
     app.run(port=5500, debug=True)
