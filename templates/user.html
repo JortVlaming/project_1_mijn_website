@@ -32,14 +32,14 @@
                 <p>Deze gebruiker heeft nog geen posts gemaakt</p>
             </div>
         {% else %}
-            <div class="post-container">
+            <section class="post-container">
                 {% for post in posts %}
-                	<div class="post">
+                	<article class="post">
                         <p>{{ post[2] }}</p>
                         <h4 class="posted_time">{{ post[3] }}</h4>
-                    </div>
+                    </article>
                 {% endfor %}
-            </div>
+            </section>
         {% endif %}
     </div>
     <script src="{{ url_for('static', filename="scripts/user.js") }}"></script>
