@@ -13,13 +13,13 @@
     <link rel="icon" href="{{ url_for('static', filename="img/favicon.png") }}">
 </head>
 <body>
-    <div id="nav">
+    <nav id="nav">
         <div class="left">
             <a href="/"><h1 id="logo">Talland Blog</h1></a>
         </div>
 
         <div class="right">
-            {% if (user != None) %}
+            {% if (user != None and not hide_login_button) %}
                 <div class="user-menu">
                 <button aria-label="User menu">
                     <a href="/user/me">
@@ -31,15 +31,15 @@
                     <a href="/auth/logout"><span class="logout_text">Logout</span></a>
                 </div>
                 </div>
-            {% else %}
+            {% elif not hide_login_button %}
                 <a href="login" id="navLoginButton"><button type="submit">Login</button></a>
             {% endif %}
         </div>
-    </div>
-    <div id="content">
+    </nav>
+    <main id="content">
 {% block content %}
 	
 {% endblock %}
-    </div>
+    </main>
 </body>
 </html>

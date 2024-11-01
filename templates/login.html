@@ -10,6 +10,9 @@
 
 {% block content %}
     <div class="left">
+        <div class="error" id="login_error" style="display: {% if l_error %} block {% else %} none {% endif %}">
+            <p>⚠︎<span id="login_error_text">{{ l_error or "" }}</span></p>
+        </div>
         <h1>Login</h1>
         <form action="auth/login" id="loginForm" name="loginForm">
             <label for="username">Username</label>
@@ -21,8 +24,11 @@
     </div>
     <div class="seperator"></div>
     <div class="right">
+        <div class="error" id="signup_error" style="display: {% if s_error %} block {% else %} none {% endif %}">
+            <p>⚠︎<span id="signup_error_text">{{ s_error or "" }}</span></p>
+        </div>
         <h1>Signup</h1>
-        <form action="auth/callback/signup" id="loginForm" name="signupForm">
+        <form action="auth/signup" id="signupForm" name="signupForm">
             <label for="username">Username</label>
             <input type="text" id="username" name="username">
             <label for="password">Password</label>
@@ -30,7 +36,7 @@
             <label for="confirm_password">Confirm Password</label>
             <input type="password" id="confirm_password" name="confirm_password">
         </form>
-        <button id="LoginButton">Signup</button>
+        <button id="SignupButton">Signup</button>
     </div>
     <script src="{{ url_for("static", filename="scripts/login.js") }}"></script>
 {% endblock %}

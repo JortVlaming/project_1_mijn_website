@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %}
+	Complete signup
+{% endblock %}
+
+{% block header %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/complete_signup.css") }}">
+{% endblock %}
+
+{% block content %}
+    <div id="complete">
+        <h1>Welkom @{{ user.username }}</h1>
+        <h3>Voordat je kan gaan bloggen moet je eerst nog een paar vragen beantwoorden.</h3>
+        <form action="/auth/finish_signup" method="post" id="completeForm">
+            <label for="opleiding">Welke opleiding doe je?</label>
+            <input type="text" id="opleiding" name="opleiding">
+            <label for="aboutme">Vertel iets over jezelf</label>
+            <input type="text" id="aboutme" name="aboutme">
+            <button>Complete signup</button>
+        </form>
+    </div>
+{% endblock %}

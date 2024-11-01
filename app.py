@@ -1,7 +1,8 @@
 import datetime
-import math
+from secrets import compare_digest
 
 from flask import Flask, render_template, request, session, redirect, url_for, abort
+from werkzeug.security import generate_password_hash
 
 from database import Database, User
 
@@ -48,7 +49,9 @@ def user_self():
 
 @app.route('/login')
 def login():
-    return render_template("login.html", hide_login_button=True)
+    if get_user_from_session() is not None:
+        return redirect(url_for("user_self"))
+    return render_template("login.html", hide_login_button=True, s_error=request.args.get("s_error"), l_error=request.args.get("l_error"))
 
 @app.route('/auth/login')
 def login_callback():
@@ -61,14 +64,44 @@ def login_callback():
     valid = db.userManager.verify_login(username, password)
 
     if not valid:
-        # TODO redirect back to login with error
-        return abort(501)
+        return redirect(url_for("login", l_error="Invalid username or password"))
 
     token = db.tokenManager.generate_token(db.userManager.username_to_id(username), username, password)
 
     session["token"] = token
 
     return redirect(url_for("home"))
+
+@app.route('/auth/signup')
+def signup_callback():
+    username = request.args.get("username")
+    password = request.args.get("password")
+    confirm_password = request.args.get("confirm_password")
+
+    if db.userManager.user_exists(username):
+        return redirect(url_for("login", s_error="Username already registered"))
+
+    if not compare_digest(password, confirm_password):
+        return redirect(url_for("login", s_error="Passwords do not match"))
+
+    db.userManager.add_user(username, username, generate_password_hash(password), "", "")
+
+    token = db.tokenManager.generate_token(db.userManager.username_to_id(username), username, password)
+
+    session["token"] = token
+
+    return redirect(url_for("finish_signup_callback"))
+
+@app.route('/auth/finish_signup', methods=["POST", "GET"])
+def finish_signup_callback():
+    user = get_user_from_session()
+    if request.method == "POST":
+        db.userManager.set_aboutme(user.id, request.form.get("aboutme"))
+        db.userManager.set_opleiding(user.id, request.form.get("opleiding"))
+
+        return redirect(url_for("user_self"))
+    else:
+        return render_template("complete_signup.html", hide_login_button=True)
 
 @app.route('/auth/logout')
 def logout_callback():
@@ -86,6 +119,17 @@ def create_post():
     db.userManager.create_post(get_user_from_session(), request.form.get("content"))
 
     return redirect(url_for("user_self"))
+
+@app.before_request
+def pre_load():
+    if get_user_from_session() is None:
+        pass
+
+
+    user = get_user_from_session()
+
+    if (user.aboutme is None or user.aboutme == "" or user.opleiding is None or user.opleiding == "") and request.path != "/auth/finish_signup" and not request.path.startswith("/static"):
+        return redirect(url_for("finish_signup_callback"))
 
 @app.context_processor
 def inject_template_scope():

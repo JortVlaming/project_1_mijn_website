@@ -45,3 +45,11 @@ input {
     margin-top: 2%;
     background-color: gray;
 }
+
+.error {
+    background-color: rgba(255, 37, 37, 0.8);
+    border-radius: 5px;
+    border: 3px solid #ff0e0e;
+    padding: 10px;
+    color: white;
+}

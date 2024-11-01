@@ -217,6 +217,26 @@ class UserManager:
         cursor.close()
         conn.close()
 
+    def set_aboutme(self, id: int, aboutme:str):
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("UPDATE users SET aboutme = %s WHERE id = %s", (aboutme, id))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+    def set_opleiding(self, id: int, opleiding: str):
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("UPDATE users SET opleiding = %s WHERE id = %s", (opleiding, id))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
 class User:
     def __init__(self, id:int, username: str, displayName: str, opleiding: str, aboutme: str):
         self.id = id
