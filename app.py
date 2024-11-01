@@ -135,7 +135,7 @@ def pre_load():
 def inject_template_scope():
     injections = dict()
 
-    injections.update(user=get_user_from_session(), pdate=prettydate)
+    injections.update(user=get_user_from_session(), pdate=prettydate, show_aside=True)
 
     return injections
 

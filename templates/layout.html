@@ -36,10 +36,17 @@
             {% endif %}
         </div>
     </nav>
-    <main id="content">
-{% block content %}
-	
-{% endblock %}
-    </main>
+    <div id="superContent">
+        <main id="content">
+            {% block content %}
+
+            {% endblock %}
+        </main>
+    {% if show_aside %}
+        <aside id="ad">
+            <a href="https://talland.nl"><img src="{{ url_for("static", filename="img/talland_reclame.png") }}" alt="Reclame"></a>
+        </aside>
+    {% endif %}
+    </div>
 </body>
 </html>
