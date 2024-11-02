@@ -59,6 +59,39 @@ class Database:
     def get_db_connection(self):
         return mysql.connector.connect(**self.db_config)
 
+    def get_recent_posts(self, user_id:int=-1,days:int=7) -> list:
+        conn = self.get_db_connection()
+        cursor = conn.cursor()
+
+        if user_id != -1:
+            cmd = "SELECT * FROM posts WHERE posted >= DATE_SUB(NOW(), INTERVAL %s DAY) AND deleted = 0 AND poster = %s"
+            params = (days, user_id)
+        else:
+            cmd = "SELECT * FROM posts WHERE posted >= DATE_SUB(NOW(), INTERVAL %s DAY) AND deleted = 0"
+            params = (days,)
+
+        cursor.execute(cmd, params)
+
+        result = cursor.fetchall()
+
+        returnable = []
+
+        i = 0
+        for post in result:
+            lst = list(post)
+            user_info = self.userManager.get_user_information(post[0])
+            if user_info is None:
+                continue
+            if user_info.username == user_info.displayName:
+                lst[0] = user_info.username
+            else:
+                lst[0] = user_info.displayName + " (@" + user_info.username + ")"
+            lst[1] = user_info.username # post id is niet nodig dus....
+            post = tuple(lst)
+            returnable.append(post)
+
+        return returnable
+
 class UserManager:
     def __init__(self, db:Database):
         self.db = db
@@ -157,7 +190,7 @@ class UserManager:
 
     def get_user_information(self, *args):
         if len(args) == 0:
-            return False
+            return None
 
         conn = self.db.get_db_connection()
         cursor = conn.cursor()
@@ -167,7 +200,7 @@ class UserManager:
         elif isinstance(args[0], str):
             cursor.execute("SELECT id, username, displayname, opleiding, aboutme FROM users WHERE username = %s", (args[0],))
         else:
-            return False
+            return None
 
         result = cursor.fetchone()
 

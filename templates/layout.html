@@ -19,6 +19,9 @@
         </div>
 
         <div class="right">
+            {% if hide_search_bar == False %}
+                <custom-search-bar></custom-search-bar>
+            {% endif %}
             {% if (user != None and not hide_login_button) %}
                 <div class="user-menu">
                 <button aria-label="User menu">

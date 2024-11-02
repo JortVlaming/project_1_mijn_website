@@ -24,7 +24,7 @@ def get_user_from_session() -> User | None:
 
 @app.route('/')
 def home():
-    return render_template("index.html", recents=[], session=session)
+    return render_template("index.html", recents=db.get_recent_posts(), session=session, hide_search_bar=True)
 
 @app.route('/search')
 def search():
@@ -37,13 +37,13 @@ def search():
 @app.route('/user/<string:name>')
 def user(name:str):
     if not db.userManager.user_exists(name):
-        return 404
+        return redirect(url_for("user_self"))
     return render_template("user.html", requested_user=db.userManager.get_user_information(name), posts=db.userManager.get_user_posts(name))
 
 @app.route("/user/me")
 def user_self():
     if get_user_from_session() is None:
-        return abort(404)
+        return redirect(url_for("home"))
 
     return redirect(url_for("user", name=get_user_from_session().username))
 

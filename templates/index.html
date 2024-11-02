@@ -21,7 +21,15 @@
     {% if (recents|length == 0) %}
         <p>Geen recente posts</p>
     {% else %}
-        <!-- TODO add recents !-->
+        <section id="post-container">
+            {% for post in recents %}
+                <article class="post">
+                    <a href="/user/{{ post[1] }}" class="user-link"><h3>{{ post[0] }}</h3></a>
+                    <p>{{ post[2] }}</p>
+                    <h4 class="posted_time">{{ pdate(post[3]) }}</h4>
+                </article>
+            {% endfor %}
+        </section>
     {% endif %}
     </div>
 {% endblock %}

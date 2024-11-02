@@ -6,3 +6,38 @@
 #title {
     font-size: 4em;
 }
+
+.post {
+    background-color: white;
+    border-radius: 15px;
+    text-align: left;
+    height: 13%;
+    padding: 1% 1% 2%;
+    color: black;
+    margin-top: 1%;
+    width: 98%;
+}
+
+.post-container {
+    padding-bottom: 10%;
+}
+
+.posted_time {
+    color: gray;
+    font-size: 0.8em;
+    margin-bottom: 1px;
+    align-self: flex-end;
+    float: right;
+}
+
+.user-link {
+    text-decoration: none;
+    color: black;
+}
+
+.recents {
+    margin-bottom: 250px;
+}
+footer {
+    margin-top: 50px;
+}
