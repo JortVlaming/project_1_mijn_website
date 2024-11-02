@@ -32,7 +32,7 @@ def search():
 
     print(results)
 
-    return render_template("search.html", results=results, query=request.args.get("query"))
+    return render_template("search.html", results=results, query=request.args.get("query"), hide_search_bar=True)
 
 @app.route('/user/<string:name>')
 def user(name:str):
@@ -135,7 +135,7 @@ def pre_load():
 def inject_template_scope():
     injections = dict()
 
-    injections.update(user=get_user_from_session(), pdate=prettydate, show_aside=True)
+    injections.update(user=get_user_from_session(), pdate=prettydate, show_aside=True, hide_search_bar=False)
 
     return injections
 

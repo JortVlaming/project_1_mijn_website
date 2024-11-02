@@ -43,6 +43,14 @@ body {
     justify-content: flex-end;
     margin-right: 2%;
     margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+
+    #search button {
+        margin-right: 10px;
+    }
 }
 
 #superContent {
@@ -123,6 +131,10 @@ button:hover {
     }
 
     aside {
+        display: none !important;
+    }
+
+    custom-search-bar {
         display: none !important;
     }
 }
