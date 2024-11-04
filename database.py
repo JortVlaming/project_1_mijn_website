@@ -270,6 +270,16 @@ class UserManager:
         cursor.close()
         conn.close()
 
+    def set_displayname(self, id: int, opleiding: str):
+        conn = self.db.get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("UPDATE users SET displayname = %s WHERE id = %s", (opleiding, id))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
 class User:
     def __init__(self, id:int, username: str, displayName: str, opleiding: str, aboutme: str):
         self.id = id

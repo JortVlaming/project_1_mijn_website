@@ -1,7 +1,7 @@
 import datetime
 from secrets import compare_digest
 
-from flask import Flask, render_template, request, session, redirect, url_for, abort
+from flask import Flask, render_template, request, session, redirect, url_for, abort, jsonify
 from werkzeug.security import generate_password_hash
 
 from database import Database, User
@@ -47,11 +47,28 @@ def user_self():
 
     return redirect(url_for("user", name=get_user_from_session().username))
 
+@app.route("/user/update", methods=["POST"])
+def edit_user():
+    user = get_user_from_session()
+
+    if user is None:
+        return redirect(url_for("login"))
+
+    naam = request.form["displayNameInput"]
+    opleiding = request.form["opleidingInput"]
+    aboutme = request.form["descriptionInput"]
+
+    db.userManager.set_displayname(user.id, naam)
+    db.userManager.set_opleiding(user.id, opleiding)
+    db.userManager.set_aboutme(user.id, aboutme)
+
+    return redirect(url_for("user_self"))
+
 @app.route('/login')
 def login():
     if get_user_from_session() is not None:
         return redirect(url_for("user_self"))
-    return render_template("login.html", hide_login_button=True, s_error=request.args.get("s_error"), l_error=request.args.get("l_error"))
+    return render_template("login.html", hide_login_button=True, s_error=request.args.get("s_error"), l_error=request.args.get("l_error"), hide_search_bar=True)
 
 @app.route('/auth/login')
 def login_callback():
@@ -101,7 +118,7 @@ def finish_signup_callback():
 
         return redirect(url_for("user_self"))
     else:
-        return render_template("complete_signup.html", hide_login_button=True)
+        return render_template("complete_signup.html", hide_login_button=True, hide_search_bar=True)
 
 @app.route('/auth/logout')
 def logout_callback():
@@ -127,6 +144,9 @@ def pre_load():
 
 
     user = get_user_from_session()
+
+    if user is None:
+        return
 
     if (user.aboutme is None or user.aboutme == "" or user.opleiding is None or user.opleiding == "") and request.path != "/auth/finish_signup" and not request.path.startswith("/static"):
         return redirect(url_for("finish_signup_callback"))
